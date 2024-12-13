@@ -1,0 +1,46 @@
+loadrt not count=1
+addf not.0 servo-thread
+
+
+loadrt scale count=2
+addf scale.0 servo-thread
+addf scale.0 servo-thread
+
+
+loadrt orient count=1
+addf orient.0 servo-thread
+
+loadrt mux2 count=1
+addf mux2.0 servo-thread
+
+loadrt near count=1
+addf near.0 servo-thread
+
+loadrt comp count=1
+addf comp.0 servo-thread
+
+loadrt or2 count=2
+addf or2.0 servo-thread
+addf or2.1 servo-thread
+
+loadrt and2 count=2
+addf and2.0 servo-thread
+addf and2.1 servo-thread
+
+
+
+
+hm2_7i92.0.encoder.00.input-index
+hm2_7i92.0.encoder.00.position
+hm2_7i92.0.encoder.00.reset
+
+
+
+loadrt orient names=orient
+loadrt pid names=orient-pid
+net orient-angle spindle.N.orient-angle orient.angle
+net orient-mode spindle.N.orient-mode orient.mode
+net orient-enable spindle.N.orient orient.enable orient-pid.enable
+net spindle-in-pos orient.is-oriented spindle.N.is-oriented
+net spindle-pos encoder.position orient.position orient-pid.feedback
+net orient-command orient.command orient-pid.command
