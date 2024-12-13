@@ -10,6 +10,9 @@ addf scale.0 servo-thread
 loadrt orient count=1
 addf orient.0 servo-thread
 
+loadrt pid names=orient-pid
+addf orient-pid.do-pid-calcs       servo-thread
+
 loadrt mux2 count=1
 addf mux2.0 servo-thread
 
@@ -29,18 +32,59 @@ addf and2.1 servo-thread
 
 
 
+#*******************
+#  Spindle M19 PID
+#*******************
 
-hm2_7i92.0.encoder.00.input-index
-hm2_7i92.0.encoder.00.position
-hm2_7i92.0.encoder.00.reset
+setp   orient-pid.Pgain     [JOINT_0]P
+setp   orient-pid.Igain     [JOINT_0]I
+setp   orient-pid.Dgain     [JOINT_0]D
+setp   orient-pid.bias      [JOINT_0]BIAS
+setp   orient-pid.FF0       [JOINT_0]FF0
+setp   orient-pid.FF1       [JOINT_0]FF1
+setp   orient-pid.FF2       [JOINT_0]FF2
+setp   orient-pid.deadband  [JOINT_0]DEADBAND
+setp   orient-pid.maxoutput [JOINT_0]MAX_OUTPUT
+setp   orient-pid.error-previous-target true
+setp   orient-pid.maxerror 0
+
+
+#net orient-index-enable  <=> orient-pid.index-enable
+#net orient-enable        =>  orient-pid.enable
+#net orient-pos-cmd       =>  orient-pid.command
+#net orient-vel-cmd       =>  orient-pid.command-deriv
+#net orient-pos-fb        =>  orient-pid.feedback
+#net orient-output        =>  orient-pid.output
 
 
 
-loadrt orient names=orient
-loadrt pid names=orient-pid
-net orient-angle spindle.N.orient-angle orient.angle
-net orient-mode spindle.N.orient-mode orient.mode
-net orient-enable spindle.N.orient orient.enable orient-pid.enable
-net spindle-in-pos orient.is-oriented spindle.N.is-oriented
-net spindle-pos encoder.position orient.position orient-pid.feedback
-net orient-command orient.command orient-pid.command
+#hm2_7i92.0.encoder.00.input-index
+#hm2_7i92.0.encoder.00.position
+#hm2_7i92.0.encoder.00.reset
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[ORIENT]
+P = 1.0
+I = 0.0
+D = 0.0
+FF0 = 0.0
+FF1 = 0.0
+FF2 = 0.0
+BIAS = 0.0
+DEADBAND = 0.0
+MAX_OUTPUT = 0.0
+
+
+
